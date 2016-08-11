@@ -1,47 +1,42 @@
 package com.example.ibesteeth.git_keybordtest;
 
-import android.content.Intent;
+
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.ibesteeth.git_keybordtest.contract.TweetPublishContract;
 import com.example.ibesteeth.git_keybordtest.emoji.EmojiKeyboardFragment;
 import com.example.ibesteeth.git_keybordtest.emoji.Emojicon;
 import com.example.ibesteeth.git_keybordtest.emoji.InputHelper;
 import com.example.ibesteeth.git_keybordtest.emoji.OnEmojiClickListener;
 
+import net.qiujuer.genius.ui.widget.Button;
 import net.qiujuer.genius.ui.widget.ImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * 作者：iBesteeth on 2016/8/11 09:36
+ * 邮箱：gujingjing@ibesteeth.com
+ */
+
+public class TweetPublishFragment extends Fragment {
 
     @Bind(R.id.edit_content)
     EditText mEditContent;
-    @Bind(R.id.iv_picture)
-    ImageView ivPicture;
-    @Bind(R.id.iv_mention)
-    ImageView ivMention;
-    @Bind(R.id.iv_tag)
-    ImageView ivTag;
-    @Bind(R.id.iv_emoji)
-    ImageView ivEmoji;
-    @Bind(R.id.lay_emoji_keyboard)
-    FrameLayout layEmojiKeyboard;
 
     public static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
@@ -49,29 +44,25 @@ public class MainActivity extends AppCompatActivity {
 
     private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
-//        this.mOperator = (TweetPublishContract.Operator) this;
-//        this.mOperator.setDataView(this);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        View view = inflater.inflate(R.layout.fragment_test, container, false);
+        ButterKnife.bind(this, view);
 
         initWidget();
 
-        Intent intent=new Intent(this,TestActivity.class);
-        startActivity(intent);
+        return view;
     }
 
     public void initWidget() {
-    // EmojiKeyboardFragment
-
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.lay_emoji_keyboard, mEmojiKeyboard);
-        trans.commit();
-
+//         EmojiKeyboardFragment
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
+                .commit();
 
         mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
@@ -112,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 final int len = s.length();
                 final int surplusLen = MAX_TEXT_LENGTH - len;
-                Toast.makeText(MainActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), s.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -153,5 +144,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }

@@ -204,7 +204,7 @@ public class EmojiKeyboardFragment extends Fragment implements
             mEmojiContent.setVisibility(View.GONE);
             mEmojiBottom.setVisibility(View.GONE);
         }
-        initPop(keyboardHeightInPx);
+//        initPop(keyboardHeightInPx);
     }
 
     @Override
